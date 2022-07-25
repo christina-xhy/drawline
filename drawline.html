@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画板</title>
+    <link rel="stylesheet" href="style.css">
+<body>
+   <canvas id="canvas" width="1000" height="1000"></canvas>
+   <script>
+        let canvas = document.getElementById("canvas");
+        canvas.width= document.body.clientWidth
+        canvas.height= document.body.clientHeight
+        let ctx = canvas.getContext("2d");
+
+        ctx.fillStyle = "black"
+        ctx.strokeStyle = "none"
+        ctx.lineWidth = 10;
+        ctx.lineCap = 'round'
+
+        drawLine(0,0,200,200)
+        drawLine(200,200,300,100)
+
+        function drawLine(x1,y1,x2,y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+        }
+    
+        let painting = false
+        var isTouchDevice = 'ontouchstart' in 
+        document.documentElement;
+        if(isTouchDevice){
+            canvas.ontouchmove =(e) => {
+                // console.log(e.touches[0])使用console.log法找到数值
+                let x = e.touches[0].clientX
+                let y = e.touches[0].clientY
+                ctx.beginPath();
+                ctx.arc(x,y,5,0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.fill();
+            }
+        }else{
+            canvas.onmousedown = (e) => {
+                painting = true
+                last = [e.clientX,e.clientY]
+            }
+            canvas.onmousemove = (e) => {
+                if(painting === true){
+                   drawLine(last[0],last[1],e.clientX,e.clientY)
+                   last = [e.clientX,e.clientY]
+                }
+                canvas.onmouseup = () => {
+                    painting = false
+                }   
+            }
+        }
+
+   </script>
+
+
+
+
+<!-- 
+
+
+    
+    
+
+        let painting = false
+        var isTouchDevice = 'ontouchstart' in 
+        document.documentElement;
+        if(isTouchDevice){
+            canvas.ontouchmove =(e) => {
+                // console.log(e.touches[0])使用console.log法找到数值
+                let x = e.touches[0].clientX
+                let y = e.touches[0].clientY
+                ctx.beginPath();
+                ctx.arc(x,y,5,0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.fill();
+            }
+        }else{
+            canvas.onmousedown = () => {
+                painting = true
+            }
+            canvas.onmousemove = (e) => {
+                if(painting === true){
+                    ctx.beginPath();
+                    ctx.arc(e.clientX, e.clientY, 5, 0, 2 * Math.PI);
+                    ctx.stroke();
+                    ctx.fill();
+                }
+                canvas.onmouseup = () => {
+                    painting = false
+                }   
+            }
+        }
+        
+
+
+
+   </script> -->
+
+
+
+
+
+
+
+
+
+    <!-- <script>
+         <div id="canvas"></div>
+        canvas.onmousemove = (e) => {
+          console.log(e)
+          console.log(e.clientX)
+          console.log(e.clientY)
+          let div = document.createElement('div')
+          //    当前网页创建一个div元素
+          div.style.position = 'absolute'
+          div.style.left = e.clientX + 'px'
+          div.style.top = e.clientY + 'px'
+          div.style.width = '5px'
+          div.style.height = '5px'
+          div.style.marginLeft = '-3px'
+          div.style.marginTop = '-3px'
+          div.style.borderRadius = '50%'
+          div.style.backgroundColor = 'black'
+
+          canvas.appendChild(div)
+          // 把div 添加进canvas，之前是储存在内存
+        }
+    </script> -->
+</body>
+</html>
